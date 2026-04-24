@@ -1,6 +1,9 @@
 package albums
 
-import "vinyl-store/models"
+import (
+	"vinyl-store/albums/config"
+	"vinyl-store/models"
+)
 
 // Base de datos simulada en memoria
 var Albums = []models.Album{
@@ -10,18 +13,20 @@ var Albums = []models.Album{
 }
 
 // Obtener todos los álbumes
-func GetAllAlbums() []models.Album {
-	return Albums
+func GetAllAlbums() ([]models.Album, error) {
+	var albums []models.Album
+	result := config.DB.Find(&albums)
+	return albums, result.Error
 }
 
 // Obtener un álbum por su ID
-func GetAlbumByID(id string) *models.Album {
-	for _, album := range Albums {
-		if album.ID == id {
-			return &album
-		}
+func GetAlbumByID(id string) (*models.Album, error) {
+	var album models.Album
+	result := config.DB.First(&album, id)
+	if result.Error != nil {
+		return nil, result.Error
 	}
-	return nil
+	return &album, nil
 }
 
 // Agregar un nuevo álbum

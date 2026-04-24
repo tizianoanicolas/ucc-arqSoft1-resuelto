@@ -2,26 +2,37 @@ package handlers
 
 import (
 	"net/http"
-	"github.com/gin-gonic/gin"
 	"vinyl-store/albums"
 	"vinyl-store/models"
+
+	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
 // Obtener todos los álbumes
 func GetAllAlbums(c *gin.Context) {
-	albumList := albums.GetAllAlbums()
+	// Recibimos la lista Y el error
+	albumList, err := albums.GetAllAlbums()
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
 	c.JSON(http.StatusOK, albumList)
 }
 
-// Obtener un álbum específico por ID
 func GetAlbumByID(c *gin.Context) {
 	id := c.Param("id")
-	album := albums.GetAlbumByID(id)
-	if album == nil {
-		c.JSON(http.StatusNotFound, gin.H{"message": "Álbum no encontrado"})
+
+	// Recibimos el álbum Y el error
+	album, err := albums.GetAlbumByID(id)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "Álbum no encontrado o error de DB"})
 		return
 	}
+
 	c.JSON(http.StatusOK, album)
 }
 
