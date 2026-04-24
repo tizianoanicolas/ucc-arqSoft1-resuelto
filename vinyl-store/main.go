@@ -2,12 +2,16 @@ package main
 
 import (
 	"log"
+	"vinyl-store/albums/config"
 	"vinyl-store/handlers"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+
+	config.InitDB() // Inicializar la conexión a la base de datos
+
 	// Configuración del router
 	router := gin.Default()
 
