@@ -2,8 +2,9 @@ package main
 
 import (
 	"log"
-	"github.com/gin-gonic/gin"
 	"vinyl-store/handlers"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
